@@ -1,1 +1,1 @@
-web: npm run stdio
+web: cd server && npm run stdio
