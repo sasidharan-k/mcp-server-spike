@@ -1,3 +1,5 @@
+import express, { Request, Response } from 'express';
+import cors from 'cors';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -8,6 +10,10 @@ import { dirname } from 'path';
 
 export const NWS_API_BASE = "https://api.weather.gov";
 export const USER_AGENT = "weather-app/1.0";
+const app = express();
+app.use(cors());
+app.use(express.json());
+
 
 // Create server instance
 const server = new McpServer({
@@ -148,6 +154,8 @@ server.tool(
     },
 );
 
+const PORT = process.env.PORT || 3000;
+
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
@@ -158,6 +166,11 @@ async function main() {
 
     console.log(`Current file full path: ${__filename} ==> Current directory: ${__dirname}`);
     console.error("Weather MCP Server running on stdio");
+     app.listen(PORT, () => {
+        console.log(`Weather MCP Server running on http://localhost:${PORT}`);
+        console.log(`SSE endpoint: http://localhost:${PORT}/sse`);
+        console.log(`Messages endpoint: http://localhost:${PORT}/api/messages`);
+    });
 }
 
 main()
