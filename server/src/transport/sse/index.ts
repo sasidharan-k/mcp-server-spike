@@ -168,10 +168,10 @@ app.get("/sse", async (req: Request, res: Response) => {
 
     // Create a new transport for this connection
     const transport = new SSEServerTransport("/api/messages", res);
-    
+     console.log("====> Session id", transport.sessionId);
     // Store the transport keyed by session ID
     transports.set(transport.sessionId, transport);
-    
+
     // Clean up when the connection is closed
     res.on('close', () => {
         transports.delete(transport.sessionId);
@@ -180,38 +180,33 @@ app.get("/sse", async (req: Request, res: Response) => {
     // Connect server to the transport
     await transport.start();
     await server.connect(transport);
-    
+
     console.log(`New SSE connection established: ${transport.sessionId}`);
 });
 
 // Setup message endpoint to receive client messages
 app.post("/api/messages", async (req: Request, res: Response) => {
     const sessionId = req.query.sessionId as string;
-    
+
     if (!sessionId) {
         res.status(400).send("Missing sessionId query parameter");
         return;
     }
-    
+
     const transport = transports.get(sessionId);
-    
+
     if (!transport) {
         res.status(404).send("Session not found");
         return;
     }
-    
+
     // Cast Express Request to IncomingMessage for compatibility with SDK
     await transport.handlePostMessage(req as unknown as IncomingMessage, res);
 });
 
 // Simple status endpoint
 app.get("/status", (_: Request, res: Response) => {
-    res.json({ 
-        status: "ok",
-        connections: transports.size,
-        serverName: serverInfo.name,
-        serverVersion: serverInfo.version
-    });
+    res.send("Weather MCP Server is running");
 });
 
 // Set up a default route for the root path

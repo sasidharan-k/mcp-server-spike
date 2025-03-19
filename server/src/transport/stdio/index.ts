@@ -3,6 +3,8 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import { AlertsResponse, ForecastResponse, PointsResponse } from "../../interface/interface.js";
 import { formatAlert, makeNWSRequest } from "../../helper/helper.js";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 export const NWS_API_BASE = "https://api.weather.gov";
 export const USER_AGENT = "weather-app/1.0";
@@ -149,7 +151,12 @@ server.tool(
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    
+
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+
+    console.log(`Current file full path: ${__filename} ==> Current directory: ${__dirname}`);
     console.error("Weather MCP Server running on stdio");
 }
 
