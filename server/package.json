@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "stdio": "node build/transport/stdio/index.js",
-    "sse": "node build/transport/sse/index.js"
+    "sse": "node build/transport/sse/index.js",
+    "start": "node build/index.js"
   },
   "keywords": [],
   "author": "",

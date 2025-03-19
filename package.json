@@ -8,7 +8,8 @@
     "build-server": "cd server && npm run build",
     "build": "npm run build-server",
     "stdio": "cd server; build/transport/stdio/index.js",
-    "sse": "cd server; build/transport/sse/index.js"
+    "sse": "cd server; build/transport/sse/index.js",
+    "start": "cd server; build/index.js"
   },
   "engines": {
     "node": "18"
@@ -18,6 +19,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.0.1",
+    "openai": "^4.87.4",
     "zod": "^3.24.2"
   },
   "devDependencies": {
