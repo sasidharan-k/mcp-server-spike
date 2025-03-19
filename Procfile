@@ -1,1 +1,1 @@
-web: cd server && npm run sse
+web: cd server && npm run start
