@@ -8,10 +8,6 @@ import { dirname } from 'path';
 
 export const NWS_API_BASE = "https://api.weather.gov";
 export const USER_AGENT = "weather-app/1.0";
-const app = express();
-app.use(cors());
-app.use(express.json());
-
 
 // Create server instance
 const server = new McpServer({
@@ -218,11 +214,15 @@ server.tool(
 );
 
 const PORT = process.env.PORT || 4000;
+const router = express.Router();
 
-app.get('/chat', (req, res) => {
+router.get('/stdio_index', (req, res) => {
     const __filename = fileURLToPath(import.meta.url);
+    console.log(__filename, "====> filename");
     res.sendFile(__filename);
 });
+
+export default router;
 
 async function main() {
     const transport = new StdioServerTransport();
@@ -234,11 +234,6 @@ async function main() {
 
     console.log(`Current file full path: ${__filename} ==> Current directory: ${__dirname}`);
     console.error("Weather MCP Server running on stdio");
-     app.listen(PORT, () => {
-        console.log(`Weather MCP Server running on http://localhost:${PORT}`);
-        console.log(`SSE endpoint: http://localhost:${PORT}/sse`);
-        console.log(`Messages endpoint: http://localhost:${PORT}/api/messages`);
-    });
 }
 
 main()

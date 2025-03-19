@@ -3,11 +3,12 @@ import cors from 'cors';
 import { MCPClient } from "./helper/mcpClient.js";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import stdioApp from './transport/stdio/index.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+app.use('stdio', stdioApp);
 const mcpClient = new MCPClient();
 // Chatbot API endpoint
 app.post("/chatbot", async (req: Request, res: any) => {
