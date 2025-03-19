@@ -3,8 +3,6 @@ import cors from 'cors';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { AlertsResponse, ForecastResponse, PointsResponse } from "../../interface/interface.js";
-import { formatAlert, makeNWSRequest } from "../../helper/helper.js";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -20,6 +18,71 @@ const server = new McpServer({
     name: "weather",
     version: "1.0.0",
 });
+
+interface ForecastPeriod {
+    name?: string;
+    temperature?: number;
+    temperatureUnit?: string;
+    windSpeed?: string;
+    windDirection?: string;
+    shortForecast?: string;
+}
+
+interface AlertsResponse {
+    features: AlertFeature[];
+}
+
+interface PointsResponse {
+    properties: {
+        forecast?: string;
+    };
+}
+
+interface ForecastResponse {
+    properties: {
+        periods: ForecastPeriod[];
+    };
+}
+interface AlertFeature {
+    properties: {
+        event?: string;
+        areaDesc?: string;
+        severity?: string;
+        status?: string;
+        headline?: string;
+    };
+}
+
+function formatAlert(feature: AlertFeature): string {
+    const props = feature.properties;
+    return [
+        `Event: ${props.event || "Unknown"}`,
+        `Area: ${props.areaDesc || "Unknown"}`,
+        `Severity: ${props.severity || "Unknown"}`,
+        `Status: ${props.status || "Unknown"}`,
+        `Headline: ${props.headline || "No headline"}`,
+        "---",
+    ].join("\n");
+}
+
+// Helper function for making NWS API requests
+async function makeNWSRequest<T>(url: string): Promise<T | null> {
+    const headers = {
+        "User-Agent": USER_AGENT,
+        Accept: "application/geo+json",
+    };
+
+    try {
+        const response = await fetch(url, { headers });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return (await response.json()) as T;
+    } catch (error) {
+        console.error("Error making NWS request:", error);
+        return null;
+    }
+}
 
 // Register weather tools directly in the index file to avoid circular dependencies
 server.tool(
@@ -154,7 +217,12 @@ server.tool(
     },
 );
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
+
+app.get('/chat', (req, res) => {
+    const __filename = fileURLToPath(import.meta.url);
+    res.sendFile(__filename);
+});
 
 async function main() {
     const transport = new StdioServerTransport();
