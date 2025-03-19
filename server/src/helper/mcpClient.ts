@@ -12,6 +12,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const SERVER_PATH = process.env.SERVER_PATH || '/app/server/build/transport/stdio/index.js';
 if (!OPENAI_API_KEY) {
     throw new Error("OPENAI_API_KEY is not set");
 }
@@ -36,7 +37,7 @@ export class MCPClient {
         try {
             // Use SSE transport for web-based communication
             // this.transport = new StdioClientTransport({command: process.execPath, args: ['/Users/sasidharank/Projects/Spike/mcp-server-spike/server/build/transport/stdio/index.js']});
-            this.transport = new StdioClientTransport({command: process.execPath, args: ['/app/server/build/transport/stdio/index.js']});
+            this.transport = new StdioClientTransport({command: process.execPath, args: [SERVER_PATH]});
 
             await this.mcp.connect(this.transport);
 

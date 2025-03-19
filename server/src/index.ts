@@ -182,13 +182,13 @@ app.get("/", (_: Request, res: Response) => {
 });
 
 app.get('/stdio.js', (req, res) => {
-    res.sendFile('/app/server/build/transport/stdio/index.js ');
+    res.sendFile('/app/server/build/src/transport/stdio/index.js ');
 });
 
 app.get('/stdio_path', (req, res) => {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
-    console.log("====> sso__filename", __filename);
+    console.log("====> sso__filename", __filename, "====> __dirname", __dirname);
     res.send(__dirname+'/transport/stdio/index.js');
 });
 
