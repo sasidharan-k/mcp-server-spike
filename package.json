@@ -10,7 +10,12 @@
     "stdio": "cd server; build/transport/stdio/index.js",
     "sse": "cd server; build/transport/sse/index.js"
   },
-
+  "engines": {
+    "node": "18"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.8"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
