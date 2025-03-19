@@ -1,0 +1,17 @@
+{
+  "name": "mcp-server-spike",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-server": "cd server && npm run build",
+    "build": "npm run build-server",
+    "stdio": "cd server; build/transport/stdio/index.js",
+    "sse": "cd server; build/transport/sse/index.js"
+  },
+
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
