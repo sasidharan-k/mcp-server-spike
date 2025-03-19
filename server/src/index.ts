@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { MCPClient } from "./helper/mcpClient.js";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 const app = express();
 app.use(cors());
@@ -181,6 +183,13 @@ app.get("/", (_: Request, res: Response) => {
 
 app.get('/stdio.js', (req, res) => {
     res.sendFile('/app/server/build/transport/stdio/index.js ');
+});
+
+app.get('/stdio_path', (req, res) => {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    console.log("====> sso__filename", __filename);
+    res.send(__dirname+'/transport/stdio/index.js');
 });
 
 const PORT = process.env.PORT || 4000;

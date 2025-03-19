@@ -35,8 +35,8 @@ export class MCPClient {
 
         try {
             // Use SSE transport for web-based communication
-            this.transport = new StdioClientTransport({command: process.execPath, args: ['/Users/sasidharank/Projects/Spike/mcp-server-spike/server/build/transport/stdio/index.js']});
-            // this.transport = new StdioClientTransport({command: process.execPath, args: ['/app/server/build/transport/stdio/index.js']});
+            // this.transport = new StdioClientTransport({command: process.execPath, args: ['/Users/sasidharank/Projects/Spike/mcp-server-spike/server/build/transport/stdio/index.js']});
+            this.transport = new StdioClientTransport({command: process.execPath, args: ['/app/server/build/transport/stdio/index.js']});
 
             await this.mcp.connect(this.transport);
 
