@@ -4,12 +4,23 @@ import { MCPClient } from "./helper/mcpClient.js";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import stdioApp from './transport/stdio/index.js';
+import stdioSpikeApp from './transport/stdio/spike.js';
+import stdioVectorServerApp from './transport/stdio/vectorServer.js';
+import { MCPClientSpike } from './helper/mcpClientSpike.js';
+import { MCPVectorClient } from './helper/mcpVectorClient.js';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('stdio', stdioApp);
-const mcpClient = new MCPClient();
+// app.use('stdio', stdioApp);
+// const mcpClient = new MCPClient();
+
+// app.use('stdio_spike', stdioSpikeApp);
+// const mcpClientSpike = new MCPClientSpike()
+
+app.use('stdio_spike', stdioVectorServerApp);
+const mcpVectorClient = new MCPVectorClient()
+
 // Chatbot API endpoint
 app.post("/chatbot", async (req: Request, res: any) => {
     try {
@@ -20,7 +31,7 @@ app.post("/chatbot", async (req: Request, res: any) => {
         }
 
         // Process the query through the MCP client
-        const response = await mcpClient.processQuery(query);
+        const response = await mcpVectorClient.processQuery(query);
 
         // Return the response
         return res.json({ response });
