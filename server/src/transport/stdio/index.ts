@@ -8,7 +8,8 @@ import { dirname } from 'path';
 
 export const NWS_API_BASE = "https://api.weather.gov";
 export const USER_AGENT = "weather-app/1.0";
-
+const BING_SEARCH_URL = 'https://api.bing.microsoft.com/v7.0/search';
+const BING_SEARCH_API_KEY = process.env.BING_API_KEY || '';
 // Create server instance
 const server = new McpServer({
     name: "weather",
@@ -211,6 +212,79 @@ server.tool(
             ],
         };
     },
+);
+
+server.tool(
+    'bing-agent',
+    'Search for information using Bing search engine',
+    {
+        searchTerm: z.string().describe('The search term to be used to search engine on www.in.gov website.'),
+    },
+    async ({ searchTerm }) => {
+        let searchText = searchTerm;
+        console.log('======================BingSearchRequest========================', searchText, '======================BingSearchRequest========================');
+        
+        // Construct search parameters
+        const params = new URLSearchParams({
+            q: searchText,
+            count: '5',
+            offset: '0',
+            mkt: 'en-us',
+        });
+        
+        const searchUrl = BING_SEARCH_URL + '?' + params.toString();
+        
+        try {
+            const response = await fetch(searchUrl, {
+                headers: {
+                    'Ocp-Apim-Subscription-Key': BING_SEARCH_API_KEY,
+                },
+            });
+        
+            if (!response.ok) {
+                const errorMessage = await response.json();
+                throw new Error(errorMessage.error?.message || 'Failed to fetch Bing search results');
+            }
+            
+            const fullpageContent = await response.json();
+            console.log('======================BingSearchResponse========================', fullpageContent, '======================BingSearchResponse========================');
+            
+            // Transform the response to match our schema
+            const results = fullpageContent.webPages?.value.map((page: any) => ({
+                name: page.name,
+                url: page.url,
+                snippet: page.snippet
+            })) || [];
+            
+            // Format the response according to the expected structure
+            return {
+                content: results.map((result: any) => ({
+                    type: "text",
+                    text: `${result.name}: ${result.url} - ${result.snippet || ''}`
+                })),
+                _meta: {
+                    totalCount: fullpageContent.webPages?.totalEstimatedMatches || 0,
+                    originalQuery: fullpageContent.queryContext?.originalQuery || searchTerm
+                },
+                isError: false
+            };
+        } catch (error) {
+            console.error('Search API error:', error);
+            
+            // Return an error response in the expected structure
+            return {
+                content: [{
+                    type: "text",
+                    text: `Error: ${error instanceof Error ? error.message : 'Failed to fetch Bing search results'}`
+                }],
+                _meta: {
+                    totalCount: 0,
+                    originalQuery: searchTerm
+                },
+                isError: true
+            };
+        }
+    }
 );
 
 const PORT = process.env.PORT || 4000;
