@@ -17,10 +17,7 @@ const server = new McpServer({
     name: "weather",
     version: "1.0.0",
 });
-console.log("OPENAI_API_KEY: ", OPENAI_API_KEY);
-const openai = new OpenAI({
-    apiKey: OPENAI_API_KEY,
-});
+
 // Define custom request schema
 const CustomRequestSchema = z.object({
     method: z.literal('custom/request'),
@@ -32,7 +29,10 @@ const CustomRequestSchema = z.object({
 server.server.setRequestHandler(CustomRequestSchema, async (request) => {
     console.error("Custom request received:----", request);
     const { message } = request.params;
-
+    console.log('openai api key ==', process.env.OPENAI_API_KEY)
+    const openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY,
+    });
     try {
         // Process the custom request
         const response = {
