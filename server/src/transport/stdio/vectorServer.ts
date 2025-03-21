@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from "dotenv";
-dotenv.config();
+
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -10,14 +10,16 @@ import { dirname } from 'path';
 import OpenAI from "openai";
 import { processVectorQuery } from '../../helper/vectorHelper.js';
 
+dotenv.config();
+
 let OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 // Create server instance
 const server = new McpServer({
-    name: "weather",
+    name: "Munis",
     version: "1.0.0",
 });
-
+console.log("OPENAI_API_KEY:---", OPENAI_API_KEY);
 // Define custom request schema
 const CustomRequestSchema = z.object({
     method: z.literal('custom/request'),
@@ -27,9 +29,11 @@ const CustomRequestSchema = z.object({
 });
 
 server.server.setRequestHandler(CustomRequestSchema, async (request) => {
+    console.log('openai api key ==', OPENAI_API_KEY)
     console.error("Custom request received:----", request);
-    const { message } = request.params;
     console.log('openai api key ==', process.env.OPENAI_API_KEY)
+    const { message } = request.params;
+
     const openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY,
     });
