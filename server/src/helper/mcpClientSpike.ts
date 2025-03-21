@@ -53,7 +53,7 @@ export class MCPClientSpike {
         console.log("Sending AI Chatbot request...");
         const response = await this.mcp.request(
             {
-                method: "custom/request",
+                method: "custom/requessst",
                 params: {
                     message: query
                 }
