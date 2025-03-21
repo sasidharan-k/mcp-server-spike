@@ -29,17 +29,9 @@ const CustomRequestSchema = z.object({
 server.server.setRequestHandler(CustomRequestSchema, async (request) => {
     console.error("Custom request received:----", request);
     const { message } = request.params;
-
+    console.log(OPENAI_API_KEY)
     try {
-        // Check if API key is set
-        if (!OPENAI_API_KEY) {
-            return {
-                status: "error",
-                data: "OpenAI API key is not set. Please check your server configuration.",
-                timestamp: new Date().toISOString()
-            };
-        }
-
+    
         const openai = new OpenAI({
             apiKey: OPENAI_API_KEY,
         });
@@ -55,7 +47,7 @@ server.server.setRequestHandler(CustomRequestSchema, async (request) => {
         response.data = res.choices[0].message.content || '';
 
         console.log("Sending response:---", response.data);
-        
+
         return response;
     } catch (error: any) {
         console.error("Error processing request:", error);

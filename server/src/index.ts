@@ -8,7 +8,9 @@ import stdioSpikeApp from './transport/stdio/spike.js';
 import stdioVectorServerApp from './transport/stdio/vectorServer.js';
 import { MCPClientSpike } from './helper/mcpClientSpike.js';
 import { MCPVectorClient } from './helper/mcpVectorClient.js';
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
