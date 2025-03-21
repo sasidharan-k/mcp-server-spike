@@ -7,15 +7,17 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-server": "cd server && npm run build",
     "build": "npm run build-server",
-    "stdio": "cd server; build/transport/stdio/index.js",
-    "sse": "cd server; build/transport/sse/index.js",
-    "start": "cd server; build/index.js"
+    "stdio": "cd server && node build/transport/stdio/index.js",
+    "sse": "cd server && node build/transport/sse/index.js",
+    "start": "cd server && node build/index.js"
   },
   "engines": {
     "node": "18"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.7.0",
+    "@opensearch-project/opensearch": "^3.4.0",
+    "axios": "^1.8.4",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.0.1",

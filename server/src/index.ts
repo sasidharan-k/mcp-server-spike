@@ -1,15 +1,20 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import { MCPClient } from "./helper/mcpClient.js";
+
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import stdioApp from './transport/stdio/index.js';
+import stdioVectorServerApp from './transport/stdio/vectorServer.js';
+import { MCPVectorClient } from './helper/mcpVectorClient.js';
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('stdio', stdioApp);
-const mcpClient = new MCPClient();
+
+app.use('stdio_spike', stdioVectorServerApp);
+const mcpVectorClient = new MCPVectorClient()
+
 // Chatbot API endpoint
 app.post("/chatbot", async (req: Request, res: any) => {
     try {
@@ -20,7 +25,7 @@ app.post("/chatbot", async (req: Request, res: any) => {
         }
 
         // Process the query through the MCP client
-        const response = await mcpClient.processQuery(query);
+        const response = await mcpVectorClient.processQuery(query);
 
         // Return the response
         return res.json({ response });
@@ -183,7 +188,7 @@ app.get("/", (_: Request, res: Response) => {
 });
 
 app.get('/stdio.js', (req, res) => {
-    res.sendFile('/app/server/build/src/transport/stdio/index.js ');
+    res.sendFile('/app/server/build/transport/stdio/index.js');
 });
 
 app.get('/stdio_path', (req, res) => {
