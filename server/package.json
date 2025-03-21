@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "npx tsc",
     "stdio": "node build/transport/stdio/index.js",
     "sse": "node build/transport/sse/index.js",
     "dev": "node build/transport/stdio/vectorServer.js",
