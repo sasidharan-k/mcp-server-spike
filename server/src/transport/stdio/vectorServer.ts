@@ -52,7 +52,7 @@ server.server.setRequestHandler(CustomRequestSchema, async (request) => {
         };
 
         const res = await processVectorQuery(openai, message);
-        response.data = JSON.stringify(res)
+        response.data = res.choices[0].message.content || '';
 
         console.log("Sending response:---", response.data);
         
@@ -87,6 +87,14 @@ async function main() {
 
     console.log(`Current file full path: ${__filename} ==> Current directory: ${__dirname}`);
     console.error("Weather MCP Server running on stdio");
+
+    // const openai = new OpenAI({
+    //     apiKey: OPENAI_API_KEY,
+    // });
+
+    // const res = await processVectorQuery(openai, 'How many ACI Liability accounts are in the system?');
+
+    // console.log("Response ---", res.choices[0].message)
 }
 
 main()

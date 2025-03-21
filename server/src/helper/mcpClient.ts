@@ -75,8 +75,7 @@ export class MCPClient {
         ];
 
         const response = await this.openai.chat.completions.create({
-            model: "gpt-3.5-turbo",
-            max_tokens: 1000,
+            model: "o1",
             messages,
             tools: this.tools,
         });
@@ -125,8 +124,7 @@ export class MCPClient {
                     });
 
                     const followUpResponse = await this.openai.chat.completions.create({
-                        model: "gpt-3.5-turbo",
-                        max_tokens: 1000,
+                        model: "o1",
                         messages,
                     });
 
@@ -136,7 +134,6 @@ export class MCPClient {
                 }
             }
         }
-
         return finalText.join("\n");
     }
 

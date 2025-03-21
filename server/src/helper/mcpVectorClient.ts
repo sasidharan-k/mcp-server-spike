@@ -7,7 +7,7 @@ dotenv.config();
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 // const SERVER_PATH = process.env.SERVER_PATH || '/app/server/build/transport/stdio/index.js';
-const SERVER_PATH = '/Users/vigneshwaraperumal/spike/mcp/weather/server/build/transport/stdio/vectorServer.js';
+const SERVER_PATH = '/Users/ramesh/Projects/Socrata/MCP/mcp-server-spike/server/build/transport/stdio/vectorServer.js';
 if (!OPENAI_API_KEY) {
     throw new Error("OPENAI_API_KEY is not set");
 }
