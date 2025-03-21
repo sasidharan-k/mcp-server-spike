@@ -19,7 +19,7 @@ const server = new McpServer({
     name: "Munis",
     version: "1.0.0",
 });
-console.log("OPENAI_API_KEY:---", OPENAI_API_KEY);
+
 // Define custom request schema
 const CustomRequestSchema = z.object({
     method: z.literal('custom/request'),
